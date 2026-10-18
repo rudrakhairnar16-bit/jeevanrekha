@@ -32,3 +32,5 @@ backups/
 .local-keys/
 
 *.tsbuildinfo
+
+.vercel
