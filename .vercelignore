@@ -1,0 +1,10 @@
+node_modules
+.next
+evidence
+assets
+test-results
+playwright-report
+tools
+*.log
+*.webm
+.git
