@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Casual_Male",
+    "sourceBytes": 1752060,
+    "optimizedBytes": 172512,
+    "animations": [
+      "Idle",
+      "Walk"
+    ],
+    "license": "CC0-1.0",
+    "creator": "Quaternius",
+    "sourceSha256": "1b8784f5e0971b0831b17940dd27e81c326a49104b9b771268080dfce57202a3",
+    "runtimeSha256": "530b220787704b7778b0633ec05df246323801e7d8c6462ee70d68e250e15221"
+  },
+  {
+    "name": "Casual_Female",
+    "sourceBytes": 1759956,
+    "optimizedBytes": 173132,
+    "animations": [
+      "Idle",
+      "Walk"
+    ],
+    "license": "CC0-1.0",
+    "creator": "Quaternius",
+    "sourceSha256": "3b4f39d27dc8a5f3b42d023f88a928679e7b1b0ea49ddb4857a07399bc4d8332",
+    "runtimeSha256": "5a49e9e4ed21ef43a4d0e6e6eb3a231095e5fa7c5e5075d15bd437b47c55d912"
+  }
+]
