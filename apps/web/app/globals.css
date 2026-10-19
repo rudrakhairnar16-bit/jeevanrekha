@@ -179,6 +179,7 @@
 
 @media(max-width:650px){
  .prototype-shell .p-top nav a,.prototype-shell .p-top nav button{font-size:11px}
+ .prototype-shell .p-top nav a{display:none!important}
  .prototype-shell .p-emergency-status{align-items:stretch;flex-wrap:wrap}
  .prototype-shell .p-emergency-status button{margin-left:0;width:100%}
  .prototype-shell .p-scan{align-items:flex-start;gap:16px}
