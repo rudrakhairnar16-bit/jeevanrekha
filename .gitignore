@@ -30,3 +30,12 @@ backups/
 .local-keys/
 
 *.tsbuildinfo
+
+# Large raw asset sources (runtime models are in apps/web/public/models/)
+assets/source/Casual_Female.glb
+assets/source/Casual_Male.glb
+assets/source/universal/*.glb
+assets/source/universal/*.bin
+assets/source/universal/*.gltf
+assets/source/universal/*.png
+
