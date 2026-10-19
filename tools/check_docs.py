@@ -6,7 +6,7 @@ errors = []
 for p in root.rglob('*.md'):
     if any(part in {'node_modules', '.next', 'test-results', 'playwright-report', '.git'} for part in p.relative_to(root).parts):
         continue
-    text = p.read_text(encoding='utf-8')
+    text = p.read_text()
     for link in re.findall(r'\]\(([^\s)]+)\)', text):
         if link.startswith(('https:', 'http:', 'mailto:', '#')):
             continue

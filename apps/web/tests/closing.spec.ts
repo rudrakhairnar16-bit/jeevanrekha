@@ -35,7 +35,7 @@ test('closing examples and both CTA destinations work by keyboard',async({page})
  const missing=page.getByRole('button',{name:'Remove witness reference',exact:true});await missing.focus();await page.keyboard.press('Space');
  await expect(page.locator('.evidence-interactive')).toHaveAttribute('data-evidence-state','unavailable');
  const phone=page.getByRole('button',{name:'Phone unusable',exact:true});await phone.focus();await page.keyboard.press('Space');await expect(phone).toHaveAttribute('aria-pressed','true');
- const prototype=page.getByRole('link',{name:'Experience the Prototype',exact:true});await prototype.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/\/(prototype|walkthrough)$/);await expect(page.locator('h1')).toContainText(/Not a live health service|One trust layer/);
+ const prototype=page.getByRole('link',{name:'Experience the Prototype',exact:true});await prototype.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/\/walkthrough$/);await expect(page.locator('h1')).toContainText('Not a live health service');
  await page.goto('/story#finale');const architecture=page.getByRole('link',{name:'Explore the Architecture',exact:true});await architecture.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/\/architecture$/);
 });
 
@@ -55,7 +55,7 @@ test('closing narrative remains complete without JavaScript and CTAs are honest'
  await expect(page.locator('.evidence-interactive .closing-nojs')).toContainText('missing reference means the comparison is unavailable');
  await expect(page.locator('.continuity-demo .closing-nojs')).toContainText('Phone unusable');
  await expect(page.locator('#care-title')).toContainText('CONTINUES');await expect(page.locator('#finale a')).toHaveCount(2);
- await page.getByRole('link',{name:'Experience the Prototype',exact:true}).click();await expect(page.locator('h1')).toContainText(/Not a live health service|One trust layer/);
+ await page.getByRole('link',{name:'Experience the Prototype',exact:true}).click();await expect(page.locator('h1')).toContainText('Not a live health service');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await context.close();
 });
 

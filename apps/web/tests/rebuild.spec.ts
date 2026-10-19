@@ -48,7 +48,7 @@ test('complete story is available with JavaScript and motion disabled',async({br
   await chapter.scrollIntoViewIfNeeded();
   expect(await chapter.evaluate(el=>getComputedStyle(el).visibility)).toBe('visible');
  }
- await page.locator('#finale a').first().click();await expect(page.locator('h1')).toContainText(/Not a live health service|One trust layer/);
+ await page.locator('#finale a').first().click();await expect(page.locator('h1')).toContainText('Not a live health service');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await context.close();
 });

@@ -15,6 +15,13 @@ export function emergencyWorld(a:AssetManager):World{
  for(let i=0;i<5;i++){const x=i*3-6;add(root,building(a,world,2.2,2+(i%3)*.6,1.3,i%2?'#30474c':'#3d5554'),x,0,-5.5);}
  for(let i=0;i<4;i++){add(root,a.box(world,.75,.008,.045,'#a5b09e',.004),i*2.4-4,.002,-.75);}
  for(const x of[-4,4]){add(root,a.capsule(world,.035,2.8,'#71817b'),x,1.4,-3);add(root,a.box(world,.7,.04,.22,'#a4b3a5'),x+.28,2.82,-3);}
+ // Rebuilt street dressing: an inhabited Indian urban evening, not an empty demo stage.
+ const pavement=a.box(world,14,.12,2.0,'#6d756e',.025);add(root,pavement,0,.01,2.7);
+ for(let i=0;i<9;i++)add(root,a.box(world,.95,.025,.045,i%2?'#d9d2b8':'#465c59',.004),-5.2+i*1.3,.085,1.72);
+ const trees:T.Group[]=[];for(const x of[-5.2,5.4]){const tree=new T.Group();add(root,tree,x,0,2.95);add(tree,a.capsule(world,.075,1.45,'#695b48'),0,.72,0);for(const [dx,dy,dz,sc] of [[0,1.65,0,.72],[-.35,1.48,.05,.5],[.38,1.52,-.08,.52]] as const){const crown=new T.Mesh(a.geo('jr-tree-crown',()=>new T.IcosahedronGeometry(.62,2)),a.material(world,'#405f50',0,.92));crown.scale.setScalar(sc);add(tree,crown,dx,dy,dz);}trees.push(tree);}
+ const kiosk=new T.Group();add(root,kiosk,5.1,0,-4.0);add(kiosk,a.box(world,2.1,1.9,.95,'#465b58',.04),0,.95,0);add(kiosk,a.box(world,1.65,.72,.025,'#c6b997',.025),0,1.18,.49);add(kiosk,a.box(world,2.45,.12,1.2,'#826c50',.02),0,1.98,0);
+ const cityPeople=[actor(a,world,'#6f7f72','#b78f75',false,'female'),actor(a,world,'#8d725e','#a97d65'),actor(a,world,'#526a72','#c29679',false,'female')];
+ cityPeople.forEach((person,i)=>{add(root,person.root,-4.8+i*4.7,0,2.25+(i%2)*.55);person.root.rotation.y=i===1?-1.7:.35;person.pose(i*.35,.15);});
  const patient=actor(a,world,'#9a8a70');add(root,patient.root,0,0,0);
  const passer=actor(a,world,'#687d79','#b18b75',false,'female');add(root,passer.root,3,0,.5);passer.root.rotation.y=-.6;
  const responder=actor(a,world,'#406d6b','#b78e73',true);add(root,responder.root,-4,0,.3);responder.root.rotation.y=.5;
@@ -28,18 +35,27 @@ export function emergencyWorld(a:AssetManager):World{
  const familyPhone=phone(a,world);familyPhone.scale.setScalar(.55);add(root,familyPhone,3.85,1.3,.3);familyPhone.rotation.y=-.15;
  const edge=a.box(world,.28,.008,.005,'#eff3df',.002);add(familyPhone,edge,0,.08,.04);
  const flow=a.line([point(.35,.11,.41),point(.05,.4,-.1),point(.25,.8,-.65)],world,'#93bea5',.006);root.add(flow);
- const ambulance=new T.Group();root.add(ambulance);ambulance.position.set(-8,0,-1.65);
- add(ambulance,a.box(world,2.55,1.15,1.05,'#d8ddd5',.10),0,.78,0);add(ambulance,a.box(world,1.0,.78,1.02,'#cfd7d1',.08),1.35,.68,0);
- add(ambulance,a.box(world,.58,.40,.012,'#28414a',.015),1.58,.88,.516);add(ambulance,a.box(world,.58,.40,.012,'#28414a',.015),1.58,.88,-.516);add(ambulance,a.box(world,.72,.08,.34,'#8ab6ad',.025),-.28,1.40,0);
- for(const x of[-.78,.92])for(const z of[-.56,.56]){const wheel=new T.Mesh(a.geo('jr-ambulance-wheel',()=>new T.CylinderGeometry(.25,.25,.13,20)),a.material(world,'#172326',0,.95));wheel.rotation.x=Math.PI/2;add(ambulance,wheel,x,.27,z);}
+ const ambulance=new T.Group();root.add(ambulance);ambulance.position.set(-10,0,-1.65);
+ // Authored, unbranded emergency vehicle silhouette: cab, patient compartment, glazing, lamps and wheels.
+ add(ambulance,a.box(world,2.85,1.34,1.16,'#e2e5dd',.12),-.35,.82,0);
+ add(ambulance,a.box(world,1.18,.92,1.12,'#d7ddd8',.10),1.58,.70,0);
+ add(ambulance,a.box(world,.78,.43,.018,'#263e46',.02),1.72,.96,.571);add(ambulance,a.box(world,.78,.43,.018,'#263e46',.02),1.72,.96,-.571);
+ add(ambulance,a.box(world,.95,.075,.40,'#82aaa3',.03),-.35,1.54,0);
+ add(ambulance,a.box(world,.08,.18,.48,'#668f89',.018),-1.78,.93,0);
+ add(ambulance,a.box(world,.22,.10,.05,'#e7d6aa',.015),2.18,.55,.57);add(ambulance,a.box(world,.22,.10,.05,'#e7d6aa',.015),2.18,.55,-.57);
+ const wheels:T.Mesh[]=[];for(const x of[-1.08,1.20])for(const z of[-.61,.61]){const wheel=new T.Mesh(a.geo('jr-ambulance-wheel',()=>new T.CylinderGeometry(.27,.27,.15,24)),a.material(world,'#172326',0,.95));wheel.rotation.x=Math.PI/2;add(ambulance,wheel,x,.28,z);wheels.push(wheel);}
  return{root,anchors:{},update(s){
   const incident=s.index>1?1:s.index===1?smooth(s.local/.75):0;
-  patient.root.rotation.z=-incident*1.50;patient.root.position.set(s.index===0?-.55+.55*smooth(s.local):-.25*incident,incident*fallenFloor,0);patient.root.children[0].visible=incident<.2;patient.body.rotation.x=Math.sin(incident*Math.PI)*.12;patient.leftLeg.rotation.x=Math.sin(incident*Math.PI)*.26;patient.rightLeg.rotation.x=-Math.sin(incident*Math.PI)*.13;patient.head.rotation.x=incident*.04;patient.pose(s.index===0?.55*s.local:0,s.index===0?smooth(Math.min(s.local/.1,(1-s.local)/.15)):0);
+  patient.root.rotation.z=-incident*1.50;patient.root.position.set(s.index===0?-1.35+1.05*smooth(s.local):-.30*incident,incident*fallenFloor,0);patient.root.children[0].visible=incident<.2;patient.body.rotation.x=Math.sin(incident*Math.PI)*.12;patient.leftLeg.rotation.x=Math.sin(incident*Math.PI)*.26;patient.rightLeg.rotation.x=-Math.sin(incident*Math.PI)*.13;patient.head.rotation.x=incident*.04;patient.head.rotation.y=s.index===0?-.08+Math.sin(s.local*Math.PI)*.16:0;patient.torso.rotation.y=s.index===0?Math.sin(s.local*Math.PI)*.035:0;patient.pose(s.index===0?1.05*s.local:0,s.index===0?.72:0);
   bag.position.copy(incident===0?patient.hand('left').add(point(0,-.22,0)):bagHold).lerp(point(-.65,.23,-.65),incident);bag.rotation.z=-incident*.45;bagContact.position.set(bag.position.x,.017,bag.position.z);bagContact.visible=incident>.8;fallenContact.position.set(.55*incident,.017,0);fallenContact.scale.set(2.3*incident,.85,1);fallenContact.visible=incident>.15&&(s.index<4||s.local<.48);
   card.position.set(.10+incident*.25,1.12-incident*1.02,.16+incident*.25);card.rotation.x=-incident*Math.PI/2;
   passer.root.position.set(3-incident*3.75,0,.5+incident*.15);passer.leftArm.rotation.x=-incident*.4;passer.root.rotation.y=-1.53-smooth((incident-.72)/.28)*2.25;passer.head.rotation.x=s.index>=2?.25:incident*.12;passer.leftLeg.rotation.x=0;passer.rightLeg.rotation.x=0;
   const arrival=s.index>3?1:s.index===3?smooth(s.local/.45):0;
-  const ambulanceArrival=s.index>2?1:s.index===2?smooth((s.local-.08)/.40):s.index===1?smooth((s.local-.72)/.28)*.28:0;ambulance.visible=(s.index===1&&s.local>.70)||(s.index>=2&&s.index<4)||(s.index===4&&s.local<.18);ambulance.position.x=-8+ambulanceArrival*4.2;
+  const ambulanceArrival=s.index>2?1:s.index===2?smooth((s.local-.12)/.58):s.index===1?smooth((s.local-.92)/.08)*.035:0;
+  ambulance.visible=(s.index===1&&s.local>.92)||(s.index>=2&&s.index<4)||(s.index===4&&s.local<.16);
+  // Long approach + eased deceleration. It enters the composition; it never pops into place.
+  ambulance.position.x=-10+ambulanceArrival*6.15;ambulance.position.z=-1.72+.07*Math.sin(ambulanceArrival*Math.PI);
+  wheels.forEach(w=>w.rotation.y=-ambulanceArrival*14);
   responder.root.visible=s.index>=3;responder.root.position.set(-3.7+arrival*3.95,0,.3-arrival*.95);responder.root.rotation.y=.5+arrival*.46;responder.rightArm.rotation.x=0;responder.leftLeg.rotation.x=0;responder.rightLeg.rotation.x=0;
   const phase=s.index===2?s.local:0;scanner.visible=s.index>=2&&s.index<=3;scanner.position.y=.75+Math.sin(phase*Math.PI)*.08;scanLine.position.y=-.2+phase*.4;
   flow.visible=s.index===3&&s.local>.35;const n=flow.geometry.index?.count||0;flow.geometry.setDrawRange(0,Math.floor(n*smooth((s.local-.35)/.45)/3)*3);

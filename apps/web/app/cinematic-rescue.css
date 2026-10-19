@@ -76,7 +76,7 @@
 /* 2026-10-17 authored landing prelude: the film no longer starts before the visitor
    has been given a calm establishing beat. The prelude is normal document flow;
    native scrolling remains untouched. */
-.film-prelude{position:relative;min-height:100svh;overflow:hidden;background:#071922;color:#eef2ea;display:grid;align-items:end;padding:clamp(28px,5vw,76px);isolation:isolate}
+.film-prelude{position:relative;min-height:82svh;overflow:hidden;background:#071922;color:#eef2ea;display:grid;align-items:end;padding:clamp(28px,5vw,76px);isolation:isolate}
 .film-prelude-atmosphere{position:absolute;inset:0;z-index:-2;background:radial-gradient(ellipse at 72% 42%,#21434a 0%,#102a33 28%,#071922 67%),linear-gradient(145deg,#071922,#102a33)}
 .film-prelude-atmosphere:after{content:'';position:absolute;left:50%;top:0;width:1px;height:100%;background:linear-gradient(transparent,#9cc6b744 45%,transparent);box-shadow:18vw 0 #9cc6b710,-26vw 0 #9cc6b70a;transform:skewX(-18deg)}
 .film-prelude-nav{position:absolute;left:clamp(28px,5vw,76px);right:clamp(28px,5vw,76px);top:30px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#b6c7c1;letter-spacing:.02em}.film-prelude-nav .film-brand{position:static;color:#eef2ea}
@@ -99,3 +99,43 @@
 .film-warm .film-transport{background:#e9e6dbe9!important;border-top-color:#526e611a}
 .film-enter:focus-visible{outline:2px solid #c9ded1;outline-offset:8px}
 @media(prefers-reduced-motion:reduce){.film-prelude-copy{animation:none}}
+
+/* 2026-10-18 cinematic rebuild — human-first opening direction. */
+.film-prelude{background:#07161d;padding-bottom:clamp(42px,7vw,96px)}
+.film-prelude-atmosphere{background:radial-gradient(ellipse at 74% 34%,#31534d 0%,#17383b 21%,#0b252d 43%,#07161d 73%)}
+.film-prelude-atmosphere:before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0 64%,#06141bd9 100%),radial-gradient(circle at 72% 40%,#e8c99324 0 2%,transparent 16%);mix-blend-mode:screen;opacity:.85}
+.film-prelude-atmosphere:after{left:64%;opacity:.45;transform:skewX(-12deg)}
+.film-prelude-copy{max-width:min(760px,70vw)}
+.film-prelude-copy h1{max-width:720px}
+.film-prelude-copy p{max-width:560px;font-size:clamp(14px,1.2vw,18px);line-height:1.8;color:#c3d0ca}
+.film-root[data-visual-act=opening] .film-overlay{top:23svh;max-width:470px}
+.film-root[data-visual-act=opening] .film-overlay h2{font-size:clamp(43px,4.2vw,66px)}
+.film-root[data-visual-act=incident] .film-overlay{bottom:12svh;max-width:430px}
+.film-root[data-visual-act=incident] .film-overlay h2 em{color:#d8c8a5}
+@media(max-width:760px){.film-prelude-copy{max-width:100%}.film-prelude-copy p{font-size:14px}.film-root[data-visual-act=opening] .film-overlay{bottom:14svh}}
+
+/* Rebuild pass: Tier-1 is intentionally more clinical than the public-minimum card. */
+.film-responder-facts{display:grid;gap:.45rem;margin:.8rem 0 .7rem;padding:.7rem 0;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent);border-bottom:1px solid color-mix(in srgb,currentColor 18%,transparent)}
+.film-responder-facts span{display:flex;justify-content:space-between;gap:1rem;font-size:.78rem;line-height:1.3}
+.film-responder-facts b{font-weight:650;text-align:right}
+
+/* Final cinematic rebuild: explicit scan beat + emergency-to-routine reset. */
+.film-scan-readout{position:relative;margin:4px 0 18px;padding:15px 0 14px;border-top:1px solid #9fc4b66b;border-bottom:1px solid #9fc4b62b;display:grid;gap:7px;overflow:hidden}
+.film-scan-readout>span,.film-reset-card>span{font-size:9px;line-height:1.6;letter-spacing:.12em;color:var(--film-muted)}
+.film-scan-readout>strong,.film-reset-card>strong{font-size:18px;font-weight:520;letter-spacing:-.02em;color:var(--film-ink)}
+.film-scan-readout>small{font-size:10px;line-height:1.65;color:var(--film-muted)}
+.film-scan-readout>i{position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,transparent,#a8d4bf,transparent);box-shadow:0 0 14px #8fc6ad66;animation:jr-scan-breathe 1.8s ease-in-out infinite}
+.film-reset-card{margin-top:16px;padding:16px 0 2px;border-top:1px solid currentColor;display:grid;gap:8px;max-width:360px}
+.film-reset-card>p{margin:0;color:var(--film-muted);font-size:11px;line-height:1.75}
+@keyframes jr-scan-breathe{0%,100%{transform:translateY(-16px);opacity:.25}50%{transform:translateY(16px);opacity:.95}}
+@media(max-width:760px){.film-scan-readout{margin-bottom:12px;padding:11px 0}.film-scan-readout>strong,.film-reset-card>strong{font-size:16px}.film-reset-card{margin-top:10px;padding-top:12px}}
+@media(prefers-reduced-motion:reduce){.film-scan-readout>i{animation:none;transform:none}}
+
+/* 2026-10-18 pacing pass: the opening remains cinematic but no longer consumes a full extra screen on compact displays. */
+@media (max-height:800px) and (min-width:761px){
+ .film-prelude{min-height:88svh}
+ .film-prelude-copy{padding-bottom:6vh}
+}
+
+/* Final jury-cut pacing: keep mobile opening readable while desktop enters the story quickly. */
+@media(max-width:760px){.film-prelude{min-height:92svh}.film-prelude-copy{padding-bottom:8vh}}

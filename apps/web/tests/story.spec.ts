@@ -9,9 +9,8 @@ for(const width of [1440,768,390,320]){
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   await expect(page.locator('#finale a')).toHaveCount(2);
   await page.getByRole('link',{name:'Experience the Prototype'}).click();
-  await expect(page).toHaveURL(/(prototype|walkthrough)/);
-  await expect(page.locator('h1')).toContainText(/Not a live health service|One trust layer/);
-  await page.goto('/walkthrough');
+  await expect(page).toHaveURL(/walkthrough/);
+  await expect(page.locator('h1')).toContainText('Not a live health service');
   await page.getByRole('link',{name:/VI Identity is not permission/}).click();
   await expect(page).toHaveURL(/#doctor-consent/);
   await expect(page.locator('#doctor-consent')).toBeInViewport();

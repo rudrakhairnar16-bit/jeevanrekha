@@ -2,7 +2,7 @@ import {test,expect,type Page} from '@playwright/test';
 import {RANGES,beatProgress,resolveNarrative} from '../components/cinema/narrative';
 import {createHash} from 'node:crypto';
 import {GpuTimer} from '../components/cinema/gpu-timer';
-async function go(page:Page,index:number,local=.60){const p=beatProgress(index,local);await page.evaluate(progress=>{const r=document.querySelector<HTMLElement>('.film-root')!;const prelude=r.querySelector<HTMLElement>('.film-prelude');const lead=prelude?.offsetHeight||0;window.scrollTo(0,r.getBoundingClientRect().top+scrollY+lead+(r.offsetHeight-lead-innerHeight)*progress);},p);await expect(page.locator('.film-root')).toHaveAttribute('data-current-act',RANGES[index].id);await expect.poll(async()=>Number(await page.locator('canvas').getAttribute('data-progress'))).toBeCloseTo(p,3);}
+async function go(page:Page,index:number,local=.60){const p=beatProgress(index,local);await page.evaluate(progress=>{const r=document.querySelector<HTMLElement>('.film-root')!;window.scrollTo(0,r.getBoundingClientRect().top+scrollY+(r.offsetHeight-innerHeight)*progress);},p);await expect(page.locator('.film-root')).toHaveAttribute('data-current-act',RANGES[index].id);await expect.poll(async()=>Number(await page.locator('canvas').getAttribute('data-progress'))).toBeCloseTo(p,3);}
 async function start(page:Page){await page.goto('/');await expect(page.locator('.film-root')).toHaveAttribute('data-film-mode','film',{timeout:30000});}
 
 test('central timeline is deterministic and camera positions are continuous at all boundaries',()=>{
@@ -13,12 +13,12 @@ test('one persistent real WebGL canvas covers all sixteen forward and reverse be
  await canvas.evaluate(e=>(e as HTMLCanvasElement).dataset.instance='original');
  for(const index of[...RANGES.map(a=>a.index),...RANGES.map(a=>a.index).reverse()]){await go(page,index);await expect(canvas).toHaveAttribute('data-instance','original');}
  expect(await canvas.evaluate(c=>!!(c as HTMLCanvasElement).getContext('webgl2'))).toBe(true);expect(errors).toEqual([]);
- if(process.env.NODE_ENV==='production') await expect(page.locator('.film-debug')).toHaveCount(0);
+ await expect(page.locator('.film-debug')).toHaveCount(0);
 });
 test('stopping scroll stops rendering; reversing restores the exact rendered composition',async({page})=>{
- await start(page);await page.locator('.film-settings summary').click();await page.getByLabel('Visual quality',{exact:true}).selectOption('low');await page.locator('.film-settings summary').click();await page.addStyleTag({content:'.film-header,.film-overlay,.film-transport,.film-world-label{visibility:hidden!important}'});await go(page,8,.64);await page.waitForTimeout(250);const canvas=page.locator('canvas');const count=await canvas.getAttribute('data-render-count');const first=await canvas.screenshot();
+ await start(page);await go(page,8,.64);await page.waitForTimeout(250);const canvas=page.locator('canvas');const count=await canvas.getAttribute('data-render-count');const first=await canvas.screenshot();
  await page.waitForTimeout(500);expect(await canvas.getAttribute('data-render-count')).toBe(count);
- await go(page,12,.8);await go(page,8,.64);await page.waitForTimeout(300);const reversed=await canvas.screenshot();
+ await go(page,12,.8);await go(page,8,.64);await page.waitForTimeout(100);const reversed=await canvas.screenshot();
  expect(createHash('sha256').update(reversed).digest('hex')).toBe(createHash('sha256').update(first).digest('hex'));
 });
 test('rapid skips, resizing and quality replacement retain complete state without stale canvases',async({page})=>{
