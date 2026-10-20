@@ -2,7 +2,7 @@ import {test,expect,type Page} from '@playwright/test';
 import {RANGES,beatProgress,resolveNarrative} from '../components/cinema/narrative';
 import {createHash} from 'node:crypto';
 import {GpuTimer} from '../components/cinema/gpu-timer';
-async function go(page:Page,index:number,local=.60){const p=beatProgress(index,local);await page.evaluate(progress=>{const r=document.querySelector<HTMLElement>('.film-root')!;window.scrollTo(0,r.getBoundingClientRect().top+scrollY+(r.offsetHeight-innerHeight)*progress);},p);await expect(page.locator('.film-root')).toHaveAttribute('data-current-act',RANGES[index].id);await expect.poll(async()=>Number(await page.locator('canvas').getAttribute('data-progress'))).toBeCloseTo(p,3);}
+async function go(page:Page,index:number,local=.60){const p=beatProgress(index,local);await page.evaluate(progress=>{const r=document.querySelector<HTMLElement>('.film-root')!;const prelude=r.querySelector<HTMLElement>('.film-prelude');const lead=prelude?.offsetHeight||0;const top=r.getBoundingClientRect().top+scrollY+lead;const distance=Math.max(1,r.offsetHeight-lead-innerHeight);window.scrollTo(0,top+distance*progress);},p);await expect(page.locator('.film-root')).toHaveAttribute('data-current-act',RANGES[index].id);await expect.poll(async()=>Number(await page.locator('canvas').getAttribute('data-progress'))).toBeCloseTo(p,3);}
 async function start(page:Page){await page.goto('/');await expect(page.locator('.film-root')).toHaveAttribute('data-film-mode','film',{timeout:30000});}
 
 test('central timeline is deterministic and camera positions are continuous at all boundaries',()=>{
