@@ -4,12 +4,34 @@ import {FullDemoExperience} from './full-demo-experience';
 
 type Status='idle'|'countdown'|'running'|'paused'|'done'|'error';
 type Step={id:string;chapter:string;caption:string;run:(d:Document)=>Promise<void>};
-const wait=(ms:number)=>new Promise(r=>setTimeout(r,ms));
+let speedMultiplier: 1 | 2 | 3 = 1;
+let currentRunToken = 0;
+const wait = (ms: number) => {
+ const tokenAtStart = currentRunToken;
+ return new Promise<void>(resolve => {
+  let elapsed = 0;
+  const tick = 40;
+  const timer = setInterval(() => {
+   if (currentRunToken !== tokenAtStart) {
+    clearInterval(timer);
+    resolve();
+    return;
+   }
+   if (document.documentElement.dataset.demoPaused !== '1') {
+    elapsed += tick * speedMultiplier;
+   }
+   if (elapsed >= ms) {
+    clearInterval(timer);
+    resolve();
+   }
+  }, tick);
+ });
+};
 const text=(el:Element|null)=>el?.textContent?.replace(/\s+/g,' ').trim()||'';
 function buttons(d:Document){return [...d.querySelectorAll('button')] as HTMLButtonElement[]}
 function byButton(d:Document,label:string,exact=false){const b=buttons(d).find(x=>exact?text(x)===label:text(x).includes(label));if(!b)throw new Error(`Expected button not found: ${label}`);return b}
 function click(d:Document,label:string,exact=false){const b=byButton(d,label,exact);if(b.disabled)throw new Error(`Expected enabled button: ${label}`);b.click()}
-async function until(test:()=>boolean,message:string,timeout=3500){const start=Date.now();while(Date.now()-start<timeout){if(test())return;await wait(80)}throw new Error(message)}
+async function until(test:()=>boolean,message:string,timeout=5000){const start=Date.now();while(Date.now()-start<timeout){if(test())return;await wait(60)}throw new Error(message)}
 function body(d:Document){return text(d.body)}
 async function role(d:Document,name:string){click(d,name);await wait(180)}
 async function accessTab(d:Document){click(d,'Access',true);await wait(140)}
@@ -32,14 +54,15 @@ const steps:Step[]=[
 ];
 
 export function DemoExperience(){
- const[full,setFull]=useState(false); const[clean,setClean]=useState(false); const[status,setStatus]=useState<Status>('idle'); const[index,setIndex]=useState(0); const[count,setCount]=useState(3); const[error,setError]=useState(''); const frame=useRef<HTMLIFrameElement>(null); const token=useRef(0);
+ const[full,setFull]=useState(false); const[clean,setClean]=useState(false); const[status,setStatus]=useState<Status>('idle'); const[index,setIndex]=useState(0); const[count,setCount]=useState(3); const[error,setError]=useState(''); const[speed,setSpeed]=useState<1|2|3>(1); const frame=useRef<HTMLIFrameElement>(null); const token=useRef(0);
  useEffect(()=>{const p=new URLSearchParams(location.search);setFull(p.get('mode')==='full');setClean(p.get('clean')==='1')},[]);
- const run=useCallback(async(from=0)=>{const my=++token.current;setError('');setStatus('running');for(let i=from;i<steps.length;i++){if(token.current!==my)return;setIndex(i);const d=frame.current?.contentDocument;if(!d){setError('Prototype frame is not available.');setStatus('error');return}try{await steps[i].run(d)}catch(e){setError(e instanceof Error?e.message:String(e));setStatus('error');return}while(token.current===my&&document.documentElement.dataset.demoPaused==='1')await wait(100)}if(token.current===my)setStatus('done')},[]);
- const start=useCallback(async()=>{token.current++;setStatus('countdown');for(let n=3;n>=1;n--){setCount(n);await wait(650)}const f=frame.current;if(!f)return;f.src='/prototype?demo=1';await new Promise<void>(resolve=>{f.onload=()=>resolve()});run(0)},[run]);
+ const changeSpeed=useCallback((s:1|2|3)=>{speedMultiplier=s;setSpeed(s)},[]);
+ const run=useCallback(async(from=0)=>{const my=++token.current;currentRunToken=my;setError('');setStatus('running');for(let i=from;i<steps.length;i++){if(token.current!==my)return;setIndex(i);const d=frame.current?.contentDocument;if(!d){setError('Prototype frame is not available.');setStatus('error');return}try{await steps[i].run(d)}catch(e){if(token.current!==my)return;setError(e instanceof Error?e.message:String(e));setStatus('error');return}while(token.current===my&&document.documentElement.dataset.demoPaused==='1')await new Promise(r=>setTimeout(r,60))}if(token.current===my)setStatus('done')},[]);
+ const start=useCallback(async()=>{token.current++;currentRunToken=token.current;setStatus('countdown');for(let n=3;n>=1;n--){setCount(n);await wait(650)}const f=frame.current;if(!f)return;f.src='/prototype?demo=1';await new Promise<void>(resolve=>{f.onload=()=>resolve()});run(0)},[run]);
  useEffect(()=>{const p=new URLSearchParams(location.search);if(!full&&p.get('autoplay')==='1'){const id=setTimeout(start,700);return()=>clearTimeout(id)}},[full,start]);
  const pause=useCallback(()=>{if(status==='running'){document.documentElement.dataset.demoPaused='1';setStatus('paused')}else if(status==='paused'){delete document.documentElement.dataset.demoPaused;setStatus('running')}},[status]);
  const skip=useCallback((target:number)=>{if(target<0||target>=steps.length)return;delete document.documentElement.dataset.demoPaused;run(target)},[run]);
- useEffect(()=>{const onKey=(e:KeyboardEvent)=>{if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;if((e.key==='Escape'||e.code==='Space')&&(status==='running'||status==='paused')){e.preventDefault();pause()}else if(e.key==='ArrowRight'&&status==='running'){skip(index+1)}else if(e.key==='ArrowLeft'&&status==='running'){skip(index-1)}else if(e.key.toLowerCase()==='r'&&status!=='idle'){start()}};window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey)},[status,pause,skip,index,start]);
+ useEffect(()=>{const onKey=(e:KeyboardEvent)=>{if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement)return;if((e.key==='Escape'||e.code==='Space')&&(status==='running'||status==='paused')){e.preventDefault();pause()}else if(e.key==='1'){changeSpeed(1)}else if(e.key==='2'){changeSpeed(2)}else if(e.key==='3'){changeSpeed(3)}else if(e.key==='ArrowRight'&&status==='running'){skip(index+1)}else if(e.key==='ArrowLeft'&&status==='running'){skip(index-1)}else if(e.key.toLowerCase()==='r'&&status!=='idle'){start()}};window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey)},[status,pause,skip,index,start,changeSpeed]);
  const restart=()=>{delete document.documentElement.dataset.demoPaused;start()};
  if(full)return <FullDemoExperience/>;
  return <main className={`demo-director-page ${clean?'is-clean':''}`}>
@@ -47,10 +70,10 @@ export function DemoExperience(){
    <div className="evidence-shade"/>
    <header className="evidence-head"><b>JeevanRekha</b><span>AUTOMATED PRODUCT PROOF · SYNTHETIC DATA</span><i>{index+1}/{steps.length}</i></header>
    <section className="evidence-caption" aria-live="polite"><small>{steps[index].chapter}</small><p>{steps[index].caption}</p></section>
-   {status==='idle'&&<div className="evidence-launch"><span>2-MINUTE EVIDENCE MODE</span><h1>Story attracts attention.<br/><em>Correct behaviour builds trust.</em></h1><p>This mode drives the real interactive prototype through patient confirmation, minimum scope, citizen review, explicit consent, scoped retrieval, revocation and blocked access.</p><button onClick={start}>Start product proof →</button><a href="/demo?mode=full">Open complete system story</a></div>}
+   {status==='idle'&&<div className="evidence-launch"><span>2-MINUTE EVIDENCE MODE</span><h1>Story attracts attention.<br/><em>Correct behaviour builds trust.</em></h1><p>This mode drives the real interactive prototype through patient confirmation, minimum scope, citizen review, explicit consent, scoped retrieval, revocation and blocked access.</p><button onClick={start}>Start product proof →</button><div style={{display:'flex',gap:10,alignItems:'center',marginTop:20}}><span style={{fontSize:11,color:'#8ea7a0'}}>Playback speed:</span><div className="evidence-speed-group" role="group" aria-label="Playback speed"><button type="button" className={speed===1?'is-active':''} onClick={()=>changeSpeed(1)}>1x</button><button type="button" className={speed===2?'is-active':''} onClick={()=>changeSpeed(2)}>2x</button><button type="button" className={speed===3?'is-active':''} onClick={()=>changeSpeed(3)}>3x</button></div></div><a href="/demo?mode=full">Open complete system story</a></div>}
    {status==='countdown'&&<div className="evidence-count">{count}</div>}
    {status==='error'&&<div className="evidence-error"><b>DEMO PAUSED — EXPECTED STATE NOT FOUND</b><p>{error}</p><button onClick={restart}>Restart safely</button><a href="/prototype">Take manual control</a></div>}
-   {status==='done'&&<div className="evidence-finish"><small>BUILT · SIMULATED · PROPOSED</small><h1>CARE CONTINUES.</h1><p>The prototype demonstrates browser behaviour with synthetic data. External providers, professional authentication and production infrastructure remain simulated or proposed as labelled.</p><button onClick={restart}>Replay</button></div>}
-   {!clean&&status!=='idle'&&status!=='countdown'&&status!=='done'&&<nav className="evidence-controls"><button onClick={()=>skip(index-1)} disabled={index===0} title="Previous step">←</button><button onClick={pause} title="Space to toggle">{status==='paused'?'Resume':'Pause'}</button><button onClick={()=>skip(index+1)} disabled={index===steps.length-1} title="Next step">→</button><button onClick={restart} title="R to restart">Restart</button><a href="/prototype">Manual takeover</a><a href="/demo?mode=full">Full story</a></nav>}
+   {status==='done'&&<div className="evidence-finish"><small>BUILT · SIMULATED · PROPOSED</small><h1>CARE CONTINUES.</h1><p>The prototype demonstrates browser behaviour with synthetic data. External providers, professional authentication and production infrastructure remain simulated or proposed as labelled.</p><div style={{display:'flex',gap:12,alignItems:'center',marginTop:22}}><button onClick={restart}>Replay</button><div className="evidence-speed-group" role="group" aria-label="Playback speed"><button type="button" className={speed===1?'is-active':''} onClick={()=>changeSpeed(1)}>1x</button><button type="button" className={speed===2?'is-active':''} onClick={()=>changeSpeed(2)}>2x</button><button type="button" className={speed===3?'is-active':''} onClick={()=>changeSpeed(3)}>3x</button></div></div></div>}
+   {!clean&&status!=='idle'&&status!=='countdown'&&status!=='done'&&<nav className="evidence-controls" aria-label="Demo controls"><button onClick={()=>skip(index-1)} disabled={index===0} title="Previous step (←)">←</button><button onClick={pause} title="Space to toggle">{status==='paused'?'Resume':'Pause'}</button><button onClick={()=>skip(index+1)} disabled={index===steps.length-1} title="Next step (→)">→</button><div className="evidence-speed-group" role="group" aria-label="Playback speed"><button type="button" className={speed===1?'is-active':''} onClick={()=>changeSpeed(1)} title="1x normal speed (key: 1)">1x</button><button type="button" className={speed===2?'is-active':''} onClick={()=>changeSpeed(2)} title="2x double speed (key: 2)">2x</button><button type="button" className={speed===3?'is-active':''} onClick={()=>changeSpeed(3)} title="3x triple speed (key: 3)">3x</button></div><button onClick={restart} title="R to restart">Restart</button><a href="/prototype">Manual takeover</a><a href="/demo?mode=full">Full story</a></nav>}
  </main>
 }
