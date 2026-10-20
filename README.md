@@ -80,3 +80,13 @@ Specialist review is required for emergency cryptography, verifiable aggregation
 5. Discuss UI/UX before choosing colors, typography, layouts or a component library.
 
 Owner: Rudra Khaire.
+
+## Competition demo routes
+
+- `/demo` — evidence-first jury proof using synthetic data.
+- `/demo?autoplay=1&clean=1` — recording-ready automated proof.
+- `/demo?mode=full` — complete system story.
+- `/beastmode` — direct route to the complete competition showcase.
+- `/prototype` — manual interactive workspaces.
+
+See `docs/DEMO_DIRECTOR.md` for evidence boundaries and release gates.
