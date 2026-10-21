@@ -1,8 +1,11 @@
 # JeevanRekha
 
-**PS000134 · VCCI · Solo registration: 1 member.**
+**PS000134 · VCCI · Solo registration: 1 member (Rudra Khairnar).**
 
 **Trust, consent, emergency, family-safety and public-health intelligence around India's existing digital-health ecosystem.**
+
+🎬 **Official Competition Pitch Video:** [Watch on Google Drive](https://drive.google.com/file/d/1hZtytfPcHI_JkimQCdirmtKLVQxWqRNa/view?usp=sharing)
+🌐 **Live Deployed Prototype:** [https://jeevanrekha-delta.vercel.app](https://jeevanrekha-delta.vercel.app)
 
 > Right Person. Right Data. Right Reason. Right Time. And never more than necessary.
 > **Care is never denied because JeevanRekha failed.**
@@ -83,10 +86,12 @@ Owner: Rudra Khaire.
 
 ## Competition demo routes
 
+- 🎬 **Video Pitch (Drive):** https://drive.google.com/file/d/1hZtytfPcHI_JkimQCdirmtKLVQxWqRNa/view?usp=sharing
 - `/demo` — evidence-first jury proof using synthetic data.
 - `/demo?autoplay=1&clean=1` — recording-ready automated proof.
 - `/demo?mode=full` — complete system story.
 - `/beastmode` — direct route to the complete competition showcase.
 - `/prototype` — manual interactive workspaces.
+- `/walkthrough` — guided narrative chapters.
 
 See `docs/DEMO_DIRECTOR.md` for evidence boundaries and release gates.

@@ -199,3 +199,46 @@
 @media(prefers-reduced-motion:reduce){.demo-stage,.v-flow i,.v-bars i{animation:none!important}.demo-progress i,.demo-beat-progress i{transition:none}}
 /* Evidence-first /demo director. The iframe is same-origin and drives the actual /prototype UI. */
 .demo-director-page{position:fixed;inset:0;background:#06171c;color:#edf2ea;z-index:200;overflow:hidden}.evidence-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#f2efe7}.evidence-shade{pointer-events:none;position:absolute;inset:0;background:linear-gradient(180deg,#06171c66 0,transparent 18%,transparent 68%,#06171cbb 100%)}.evidence-head{position:absolute;left:20px;right:20px;top:16px;display:flex;gap:14px;align-items:center;padding:10px 14px;border:1px solid #ffffff22;background:#071a20e8;backdrop-filter:blur(12px);border-radius:10px;z-index:4}.evidence-head b{font:18px Georgia}.evidence-head span{font-size:9px;letter-spacing:.16em;color:#a9c0b9}.evidence-head i{margin-left:auto;font:10px monospace;color:#d7bd78}.evidence-caption{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);width:min(760px,calc(100% - 40px));padding:17px 22px;background:#071a20ee;border:1px solid #ffffff22;border-radius:12px;z-index:5;box-shadow:0 18px 60px #0007}.evidence-caption small{font-size:9px;letter-spacing:.18em;color:#d7bd78}.evidence-caption p{font:17px/1.45 Georgia;margin:7px 0 0}.evidence-launch,.evidence-error,.evidence-finish{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px;background:radial-gradient(circle at 50% 40%,#12343b,#06171c 62%)}.evidence-launch span,.evidence-finish small{font-size:10px;letter-spacing:.2em;color:#d7bd78}.evidence-launch h1,.evidence-finish h1{font:clamp(40px,6vw,78px)/1.02 Georgia;margin:18px 0}.evidence-launch h1 em{font-weight:normal;color:#9fcab9}.evidence-launch p,.evidence-finish p,.evidence-error p{max-width:720px;color:#b8c8c3;line-height:1.6}.evidence-launch button,.evidence-error button,.evidence-finish button{margin-top:22px;padding:14px 22px;border:0;border-radius:8px;background:#d7bd78;color:#10282d;font-weight:800;cursor:pointer}.evidence-launch a,.evidence-error a{margin-top:16px;color:#bcd1ca}.evidence-count{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:#06171ce8;font:120px Georgia;color:#d7bd78}.evidence-error b{color:#ed9387;letter-spacing:.08em}.evidence-controls{position:absolute;right:22px;bottom:118px;z-index:6;display:flex;gap:7px;align-items:center}.evidence-controls button,.evidence-controls a{border:1px solid #ffffff28;background:#071a20e8;color:#e7eee9;padding:9px 12px;border-radius:7px;font-size:11px;text-decoration:none}.evidence-speed-group{display:inline-flex;gap:2px;background:#041014cc;padding:2px;border-radius:7px;border:1px solid #ffffff28;align-items:center}.evidence-speed-group button{border:0!important;background:transparent!important;color:#9cb5ae!important;padding:7px 11px!important;border-radius:5px!important;font-size:11px!important;font-weight:700!important;cursor:pointer;line-height:1;min-height:auto!important}.evidence-speed-group button:hover{color:#fff!important}.evidence-speed-group button.is-active{background:#d7bd78!important;color:#071a20!important}.jury-dedication-note{margin:16px auto 6px;max-width:680px;background:#082129e6;border:1px solid #d7bd7855;border-radius:12px;padding:16px 20px;text-align:left;box-shadow:0 12px 40px #00000055;position:relative}.jury-note-badge{display:inline-block;font:700 9px/1 monospace;letter-spacing:.16em;color:#d7bd78;background:#d7bd7820;padding:4px 8px;border-radius:4px;margin-bottom:8px}.jury-note-text{font:italic 13px/1.6 Georgia,serif;color:#d8ebe4!important;margin:0 0 8px!important;max-width:none!important}.jury-note-sign{display:block;font:500 11px monospace;color:#9cb5ae;text-align:right}.demo-director-page.is-clean .evidence-head{opacity:.92}.evidence-demo.is-clean .evidence-caption{bottom:18px}.evidence-demo.is-clean .evidence-controls{display:none}@media(max-width:600px){.evidence-head{left:8px;right:8px;top:8px}.evidence-head span{display:none}.evidence-caption{bottom:10px;width:calc(100% - 16px);padding:13px 15px}.evidence-caption p{font-size:14px}.evidence-controls{right:10px;bottom:102px;flex-wrap:wrap;justify-content:flex-end}.evidence-launch{padding:22px}.evidence-launch h1{font-size:42px}}@media(prefers-reduced-motion:reduce){.demo-director-page *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Judges & Evaluators Modal & Floating Pill */
+.jury-floating-pill{position:fixed;bottom:24px;right:24px;z-index:900;display:inline-flex;align-items:center;gap:9px;background:#071d24f0;backdrop-filter:blur(14px);border:1px solid #d7bd7888;color:#edf2ea;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 12px 36px #00000099;transition:all .2s ease;text-decoration:none}.jury-floating-pill:hover{background:#0b2b35;border-color:#d7bd78;transform:translateY(-2px);box-shadow:0 16px 44px #000000cc}.jury-pill-icon{font-size:16px;line-height:1}.jury-pill-text{letter-spacing:.02em}.jury-pill-dot{width:8px;height:8px;border-radius:50%;background:#83c8b2;box-shadow:0 0 10px #83c8b2;animation:jury-pulse 2s infinite}
+@keyframes jury-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.85)}}
+
+.jury-modal-backdrop{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#030c0fe0;backdrop-filter:blur(10px);padding:20px;overflow-y:auto;animation:jury-fade-in .22s ease-out}
+@keyframes jury-fade-in{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+
+.jury-modal-container{position:relative;width:min(660px,100%);background:linear-gradient(155deg,#0a252de8,#06171cf4);border:1px solid #d7bd7866;border-radius:16px;padding:32px;box-shadow:0 30px 100px #000000cc;color:#edf2ea}
+.jury-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.jury-modal-badge span{display:inline-block;font:700 10px/1 monospace;letter-spacing:.16em;color:#d7bd78;background:#d7bd7820;border:1px solid #d7bd7840;padding:5px 10px;border-radius:6px}
+.jury-modal-close{background:transparent;border:0;color:#9eb2ad;font-size:18px;width:32px;height:32px;display:grid;place-items:center;border-radius:6px;cursor:pointer;transition:all .15s}
+.jury-modal-close:hover{background:#ffffff15;color:#fff}
+.jury-modal-title{font:26px/1.25 Georgia,serif;color:#f5f8f6;margin:0 0 18px;letter-spacing:-.01em}
+.jury-modal-body{margin-bottom:26px;color:#c1d3cd;font-size:14px;line-height:1.65}
+.jury-modal-quote{font:italic 14px/1.65 Georgia,serif;color:#dbebe5;margin:0 0 14px;padding-left:14px;border-left:2px solid #d7bd7888}
+.jury-modal-quote strong{color:#fff;font-weight:600}
+.jury-modal-quote em{color:#83c8b2;font-style:normal}
+.jury-modal-text{margin:0 0 12px}
+.jury-modal-text strong{color:#edf2ea}
+.jury-modal-sign{display:block;font:600 12px monospace;color:#d7bd78;text-align:right;margin-top:10px}
+.jury-modal-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
+.jury-btn-primary{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;border-radius:8px;background:#d7bd78;color:#07191f;font-weight:700;font-size:13px;text-decoration:none;transition:all .15s;box-shadow:0 4px 18px #d7bd7833}
+.jury-btn-primary:hover{background:#e8cb85;transform:translateY(-1px);box-shadow:0 6px 24px #d7bd7855}
+.jury-btn-secondary{display:inline-flex;align-items:center;gap:6px;padding:12px 18px;border-radius:8px;background:#83c8b2;color:#071f25;font-weight:700;font-size:13px;text-decoration:none;transition:all .15s}
+.jury-btn-secondary:hover{background:#95dac4;transform:translateY(-1px)}
+.jury-btn-tertiary{display:inline-flex;align-items:center;gap:6px;padding:12px 16px;border-radius:8px;background:#0c2a33;color:#edf2ea;border:1px solid #ffffff24;font-size:13px;font-weight:600;text-decoration:none;transition:all .15s}
+.jury-btn-tertiary:hover{background:#123b47;color:#fff}
+.jury-modal-footer{text-align:center;border-top:1px solid #ffffff12;padding-top:14px}
+.jury-btn-dismiss{background:transparent;border:0;color:#92aaa2;font-size:12px;font-weight:500;cursor:pointer;padding:6px 14px;border-radius:4px;transition:color .15s}
+.jury-btn-dismiss:hover{color:#edf2ea;text-decoration:underline}
+
+.jury-video-cta{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:#d7bd7824;border:1px solid #d7bd7888;color:#f0dab2;font-weight:700;font-size:12px;border-radius:6px;text-decoration:none;margin-top:12px;transition:all .15s}
+.jury-video-cta:hover{background:#d7bd78;color:#07191f;border-color:#d7bd78}
+
+@media(max-width:600px){
+  .jury-floating-pill{bottom:16px;right:16px;padding:8px 14px;font-size:12px}
+  .jury-modal-container{padding:22px 18px}
+  .jury-modal-title{font-size:20px}
+  .jury-modal-actions{flex-direction:column;align-items:stretch}
+  .jury-btn-primary,.jury-btn-secondary,.jury-btn-tertiary{justify-content:center}
+}
+
